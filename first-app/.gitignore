@@ -1,0 +1,14 @@
+# dependencies
+/node_modules
+
+# IDE
+/.vscode
+
+# misc
+yarn.lock
+
+# tests
+/test
+
+# dist
+/dist
