@@ -7,13 +7,15 @@ import { AppService } from './app.service';
 import { DatabaseConfig } from './core/database/database.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
+import { PostsModule } from './modules/posts/posts.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal: true}),
     TypeOrmModule.forRoot({...DatabaseConfig, autoLoadEntities: true}),
     AuthModule,
-    UsersModule
+    UsersModule,
+    PostsModule
   ],
   controllers: [AppController],
   providers: [AppService],

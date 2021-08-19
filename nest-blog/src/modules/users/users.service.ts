@@ -15,10 +15,10 @@ export class UsersService {
     }
 
     async findOneById(id: number): Promise<User> {
-        return await this.userRepository.findOneOrFail(id);
+        return await this.userRepository.findOne(id);
     }
 
     async findOneByEmail(email: string): Promise<User> {
-        return await this.userRepository.findOneOrFail({email: email});
+        return await this.userRepository.findOne({email: email});
     }
 }
