@@ -25,14 +25,14 @@ export class PostsController {
 
     @UseGuards(JwtAuthGuard)
     @Put('/:id')
-    async updatePost(@Body() post: CreatePostDto, @Request() req) {
-        return await this.postsService.updatePost(post, req.user.id);
+    async updatePost(@Body() post: CreatePostDto, @Param('id', ParseIntPipe) id: number, @Request() req) {
+        return await this.postsService.updatePost(post, id, req.user.id);
     }
 
     @UseGuards(JwtAuthGuard)
     @Delete('/:id')
-    async delete(@Param('id',ParseIntPipe) id: number) {
-        return await this.postsService.deletePost(id);
+    async delete(@Param('id',ParseIntPipe) id: number, @Request() req) {
+        return await this.postsService.deletePost(id, req.user.id);
     }
 
 }
