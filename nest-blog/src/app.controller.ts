@@ -1,13 +1,12 @@
-import { Controller, Get } from '@nestjs/common';
-import { AuthService } from './modules/auth/auth.service';
+import { Controller, Get, Response, UseInterceptors } from '@nestjs/common';
+import { AuthInterceptor } from './common/auth.interceptor';
 
-
+@UseInterceptors(AuthInterceptor)
 @Controller()
 export class AppController {
-  constructor(private readonly authService: AuthService) {}
 
   @Get()
-  home() {
-    return "home page";
+  home(@Response() res) {
+    return res.redirect('/posts');
   }
 }

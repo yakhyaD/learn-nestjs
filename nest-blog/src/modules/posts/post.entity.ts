@@ -6,10 +6,10 @@ export class Post{
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({length: 500})
     title: string;
 
-    @Column()
+    @Column('text')
     body: string;
 
     @ManyToOne(() => User, user => user.posts, {onDelete: "SET NULL"})

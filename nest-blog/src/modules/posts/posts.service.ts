@@ -2,6 +2,8 @@ import { CreatePostDto } from './dto/create-post';
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as jwt from 'jsonwebtoken';
+
 import { Post } from './post.entity';
 import { UsersService } from '../users/users.service';
 
@@ -19,7 +21,7 @@ export class PostsService {
     }
 
     async findAllPosts(): Promise<Post[]>{
-        return await this.postsRepository.find();
+        return await this.postsRepository.find({relations: ["user"]});
     }
 
     async findPostById(id: number): Promise<Post>{
@@ -47,5 +49,39 @@ export class PostsService {
         }
 
         return {msg:"Post deleted successfully",  postId};
+    }
+    async getPosts(req){
+        const token = req.headers?.authorization && req.headers.authorization.split(' ')[1];
+        const posts = await this.findAllPosts();
+        if (token) {
+            let userId
+            jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
+                if (err) console.log(err);
+                userId = decoded.id;
+            })
+            const data: any = []
+            posts.forEach(post => {
+                const el: any = post
+                el.show = el.user.id === userId
+                data.push(el);
+            })
+            return data ;
+        }
+        return posts;
+    }
+    async getOnePost(req, id) {
+        const token = req.headers?.authorization && req.headers.authorization.split(' ')[1];
+        const post = await this.findPostById(id);
+        if (token) {
+            let userId
+            jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
+                if (err) console.log(err);
+                userId = decoded.id;
+            })
+            const data: any = post
+            data.show = data.user.id === userId
+            return data;
+        }
+        return post;
     }
 }
